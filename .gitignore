@@ -1,0 +1,10 @@
+*
+!*/
+!*.csv
+!*.exe
+!*.cpp
+!*.h
+!*.hpp
+!*.py
+!.README
+!*.gitignore
