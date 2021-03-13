@@ -10,6 +10,64 @@ void FillMatrix(ifstream&, char**, size_t&, size_t&);
 void DeleteMatrix(char**, size_t&, size_t&);
 void PrintMatrix(char** Matrix, size_t& rows, size_t& columns);
 
+class Queue {
+private:
+    int* arr;
+    int head = 0;
+    int tail = 0;
+    int count = 0;
+
+public:
+    Queue() { // конструктор
+        arr = new int[100];
+    }
+
+    Queue(const Queue& other) { // конструктор копирования
+        this->head = other.head;
+        this->tail = other.tail;
+        this->count = other.count;
+        this->arr = new int[100];
+        for (int i = other.head; i < other.tail; i++) {
+            this->arr[i] = other.arr[i];
+        }
+
+    }
+
+    ~Queue() { // деструктор
+        delete[] arr;
+    }
+
+    void push(int x) {
+        arr[tail++] = x;
+        ++count;
+    }
+
+    int pop() {
+        if (head != tail) {
+            ++head;
+            --count;
+            return arr[head - 1];
+        }
+        else {
+            cout << "Empty" << endl;
+            return -1;
+        }
+    }
+
+    bool is_empty() {
+        return head == tail;
+    }
+
+    int front() {
+        if (head == tail) {
+            cout << "Empty. Error: ";
+            return -1;
+        }
+        else return arr[head];
+    }
+
+};
+
 int main()
 {
     ifstream input("..\\..\\iofiles\\input.txt");
@@ -73,7 +131,7 @@ void FillMatrix(ifstream& input, char** Matrix, size_t& rows, size_t& columns) {
 void DeleteMatrix(char** Matrix, size_t &rows, size_t& columns) {
     for (size_t i = 0; i < rows; i++)
     {
-        delete[] Matrix[rows];
+        delete[] Matrix[i];
     }
     delete Matrix;
 }
