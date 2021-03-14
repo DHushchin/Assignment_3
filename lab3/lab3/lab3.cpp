@@ -18,55 +18,15 @@ private:
     int count = 0;
 
 public:
-    Queue() { // конструктор
-        arr = new int[100];
-    }
-
-    Queue(const Queue& other) { // конструктор копирования
-        this->head = other.head;
-        this->tail = other.tail;
-        this->count = other.count;
-        this->arr = new int[100];
-        for (int i = other.head; i < other.tail; i++) {
-            this->arr[i] = other.arr[i];
-        }
-
-    }
-
-    ~Queue() { // деструктор
-        delete[] arr;
-    }
-
-    void push(int x) {
-        arr[tail++] = x;
-        ++count;
-    }
-
-    int pop() {
-        if (head != tail) {
-            ++head;
-            --count;
-            return arr[head - 1];
-        }
-        else {
-            cout << "Empty" << endl;
-            return -1;
-        }
-    }
-
-    bool is_empty() {
-        return head == tail;
-    }
-
-    int front() {
-        if (head == tail) {
-            cout << "Empty. Error: ";
-            return -1;
-        }
-        else return arr[head];
-    }
-
+    Queue();
+    Queue(const Queue& other);
+    ~Queue();
+    void push(int x);
+    int pop();
+    bool is_empty();
+    int front();
 };
+
 
 int main()
 {
@@ -83,6 +43,53 @@ int main()
     DeleteMatrix(Matrix, rows, columns);
     input.close();
     return 0;
+}
+
+Queue::Queue() { // конструктор
+    arr = new int[100];
+}
+
+Queue::Queue(const Queue& other) { // конструктор копирования
+    this->head = other.head;
+    this->tail = other.tail;
+    this->count = other.count;
+    this->arr = new int[100];
+    for (int i = other.head; i < other.tail; i++) {
+        this->arr[i] = other.arr[i];
+    }
+}
+
+Queue::~Queue() { // деструктор
+    delete[] arr;
+}
+
+void Queue::push(int x) {
+    arr[tail++] = x;
+    ++count;
+}
+
+int Queue::pop() {
+    if (head != tail) {
+        ++head;
+        --count;
+        return arr[head - 1];
+    }
+    else {
+        cout << "Empty" << endl;
+        return -1;
+    }
+}
+
+bool Queue::is_empty() {
+    return head == tail;
+}
+
+int Queue::front() {
+    if (head == tail) {
+        cout << "Empty. Error: ";
+        return -1;
+    }
+    else return arr[head];
 }
 
 void FindSize(ifstream& input, size_t& rows, size_t& columns) {
