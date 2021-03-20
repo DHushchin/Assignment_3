@@ -2,6 +2,11 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include <queue>
+
+#define X_STEP 20
+#define Y_STEP 20
+
 using namespace std;
 
 void FindSize(ifstream& , size_t&, size_t&);
@@ -28,6 +33,21 @@ public:
 };
 
 
+struct Point {
+    int x, y;
+};
+
+inline double heuristic(int x1, int y1, int x2, int y2) {
+    return abs(x1 - x2) + abs(y1 - y2);
+}
+
+bool isBlock(char** matr, int i, int j) { 
+    if (matr[i][j] = 'X') return true;
+    else return false;
+}
+
+
+
 int main()
 {
     ifstream input("..\\..\\iofiles\\input.txt");
@@ -42,6 +62,10 @@ int main()
     PrintMatrix(Matrix, rows, columns);
     DeleteMatrix(Matrix, rows, columns);
     input.close();
+
+    
+
+
     return 0;
 }
 
