@@ -16,7 +16,8 @@ void FillMatrix(ifstream&, char**, size_t&, size_t&);
 void DeleteMatrix(char**, size_t&, size_t&);
 void PrintMatrix(char** Matrix, size_t& rows, size_t& columns);
 int FindSizeGraph(char** Matrix, size_t& rows, size_t& columns);
-int CreateGraph(int& size);
+int** CreateGraph(int& size);
+void FillGraph(int** Graph, int& size);
 
 class Queue {
 private:
@@ -219,6 +220,14 @@ int FindSizeGraph(char** Matrix, size_t& rows, size_t& columns) {
     return size;
 }
 
-int CreateGraph(int& size) {
+int** CreateGraph(int& size) {
+    int** graph = new int* [size];
+    for (size_t i = 0; i < size; i++)
+    {
+        graph[i] = new int[size];
+    }
+}
+
+void FillGraph(int** Graph, int& size) {
 
 }
