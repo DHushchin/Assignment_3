@@ -214,8 +214,10 @@ void FindReach(Point& point, vector<Point>& reachable, vector<Point>& visit, cha
             reachable.push_back(left);
         }
         else {
-            if (point1.dist < min) 
-                min = point1.dist;
+            if (visit[point1.id].dist > point1.dist) {
+               visit[point1.id].dist = point1.dist;
+               visit[point1.id].id = point1.id;
+            }
         }
     }
  
@@ -232,8 +234,10 @@ void FindReach(Point& point, vector<Point>& reachable, vector<Point>& visit, cha
             reachable.push_back(right);
         }
         else {
-            if (point1.dist < min)
-                min = point1.dist;
+            if (visit[point1.id].dist > point1.dist) {
+                visit[point1.id].dist = point1.dist;
+                visit[point1.id].id = point1.id;
+            }
         }
     }
 
@@ -249,8 +253,10 @@ void FindReach(Point& point, vector<Point>& reachable, vector<Point>& visit, cha
             reachable.push_back(up);
         }
         else {
-            if (point1.dist < min)
-                min = point1.dist;
+            if (visit[point1.id].dist > point1.dist) {
+                visit[point1.id].dist = point1.dist;
+                visit[point1.id].id = point1.id;
+            }
         }
     }
 
@@ -266,8 +272,10 @@ void FindReach(Point& point, vector<Point>& reachable, vector<Point>& visit, cha
             reachable.push_back(down);
         }
         else {
-            if (point1.dist < min)
-                min = point1.dist;
+            if (visit[point1.id].dist > point1.dist) {
+                visit[point1.id].dist = point1.dist;
+                visit[point1.id].id = point1.id;
+            }
         }
     }
 }
