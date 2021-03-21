@@ -4,7 +4,6 @@
 #include <string>
 #include <queue>
 
-
 #define INF INT_MAX
 
 using namespace std;
@@ -14,9 +13,7 @@ char** CreateMatrix(size_t&, size_t&);
 void FillMatrix(ifstream&, char**, size_t&, size_t&);
 void DeleteMatrix(char**, size_t&, size_t&);
 void PrintMatrix(char** Matrix, size_t& rows, size_t& columns);
-int FindSizeGraph(char** Matrix, size_t& rows, size_t& columns);
-int** CreateGraph(int& size);
-void FillGraph(int** Matrix, size_t& rows, size_t& columns, int** Graph, int& size);
+
 
 class Queue {
 private:
@@ -37,7 +34,10 @@ public:
 
 
 struct Point {
-    int x, y;
+    int i, j;
+    int dist;
+    int id;
+    int parent_id;
 };
 
 inline double heuristic(int x1, int y1, int x2, int y2) {
@@ -63,9 +63,7 @@ int main()
     FillMatrix(input, Matrix, rows, columns);
     PrintMatrix(Matrix, rows, columns);
     input.close();
-    //graph
-    int sizeOfGraph = FindSizeGraph(Matrix, rows, columns);
-    cout << sizeOfGraph;
+    
 
 
     DeleteMatrix(Matrix, rows, columns);
@@ -170,20 +168,65 @@ void DeleteMatrix(char** Matrix, size_t &rows, size_t& columns) {
     delete Matrix;
 }
 
-void FindScopes(int& start, int& end) {
-    cout << "start = ";
-    cin >> start;
-    cout << "end";
-    cin >> end;
+void FindScopes(Point& point1, Point& point2) {
+    cout << endl << "Enter I coord of start point: "; cin >> point1.i;
+    cout << "Enter J coord of start point: "; cin >> point1.j;
+    cout << "Enter I coord of end point: "; cin >> point2.i;
+    cout << "Enter J coord of end point: "; cin >> point2.j;
+    cout << endl;
 }
 
-void Dijkstra(int** Graph, int& Size)
+void FindReach(Point& point, vector<Point>& reach, char** matr, int rows, int columns) {
+    if (point.j > 0 && (matr[point.i][point.j - 1] != 'X')) {
+        Point left;
+        left.i = point.i;
+        left.j = point.j - 1;
+        left.parent_id = point.id;
+        left.dist = point.id + 10;
+        reach.push_back(left);
+    }
+
+    if (point.j < columns - 1 && (matr[point.i][point.j + 1] != 'X')) {
+        Point right;
+        right.i = point.i;
+        right.j = point.j + 1;
+        right.parent_id = point.id;
+        right.dist = point.id + 10;
+        reach.push_back(right);
+    }
+
+    if (point.i > 0 && (matr[point.i - 1][point.j] != 'X')) {
+        Point up;
+        up.i = point.i - 1;
+        up.j = point.j;
+        up.parent_id = point.id;
+        up.dist = point.id + 10;
+        reach.push_back(up);
+    }
+
+    if (point.i < rows - 1 && (matr[point.i + 1][point.j] != 'X')) {
+        Point down;
+        down.i = point.i + 1;
+        down.j = point.j;
+        down.parent_id = point.id;
+        down.dist = point.id + 10;
+        reach.push_back(down);
+    }
+}
+
+void Dijkstra(char** Matrix, int rows, int columns)
 {
-    int st, end;
-    FindScopes(st, end);
+    Point start, end;
+    FindScopes(start, end);
+    start.id = 0;
+    start.dist = 0;
+    vector<Point> visited, reachable;
+    visited.push_back(start);
+    FindReach(start, reachable, Matrix, rows, columns);
+
+
+    /*
     int index;
-    int* distance = new int[Size];
-    bool* visited = new bool[Size];
     for (int i = 0; i < Size; i++)
     {
         distance[i] = INF; visited[i] = false;
@@ -205,39 +248,8 @@ void Dijkstra(int** Graph, int& Size)
             }
         }
     }
+    */
 }
 
-int FindSizeGraph(char** Matrix, size_t& rows, size_t& columns) {
-    int size = 0;
-    for (size_t i = 0; i < rows; i++)
-    {
-        for (size_t j = 0; j < columns; j++)
-        {
-            if (Matrix[i][j] != 'X' && Matrix[i][j] == ' ') {
-                size++;
-            }
-        }
-    }
-    return size;
-}
 
-int** CreateGraph(int& size) {
-    int** graph = new int* [size];
-    for (size_t i = 0; i < size; i++)
-    {
-        graph[i] = new int[size];
-    }
-    return graph;
-}
 
-void DeleteGraph(int** graph, int& size) {
-    for (size_t i = 0; i < size; i++)
-    {
-        delete[] graph[i];
-    }
-    delete graph;
-}
-
-void FillGraph(int** Matrix, size_t& rows, size_t& columns, int** Graph, int& size) {
-
-}
