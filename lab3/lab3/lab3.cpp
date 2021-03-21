@@ -38,16 +38,20 @@ struct Point {
     int dist;
     int id;
     int parent_id;
+
+    bool operator ==(const Point& other) {
+        return this->i == other.i && this->j == other.j;
+    }
+
+    bool operator !=(const Point& other) {
+        return !(this->i == other.i && this->j == other.j);
+    }
 };
 
 inline double heuristic(int x1, int y1, int x2, int y2) {
     return fabs(x1 - x2) + fabs(y1 - y2);
 }
 
-bool isBlock(char** matr, int i, int j) { 
-    if (matr[i][j] == 'X') return true;
-    else return false;
-}
 
 
 int main()
@@ -176,8 +180,15 @@ void FindScopes(Point& point1, Point& point2) {
     cout << endl;
 }
 
-void FindReach(Point& point, vector<Point>& reach, char** matr, int rows, int columns) {
-    if (point.j > 0 && (matr[point.i][point.j - 1] != 'X')) {
+bool isVisited(Point point, vector<Point> visited) {
+    for (size_t i = 0; i < visited.size(); i++) {
+        if (visited[i] == point) return true;
+        else return false;
+    }
+}
+
+void FindReach(Point& point, vector<Point>& reach, vector<Point>& visit, char** matr, int rows, int columns) {
+    if (point.j > 0 && (matr[point.i][point.j - 1] != 'X') && !isVisited(point, visit)) {
         Point left;
         left.i = point.i;
         left.j = point.j - 1;
@@ -186,7 +197,7 @@ void FindReach(Point& point, vector<Point>& reach, char** matr, int rows, int co
         reach.push_back(left);
     }
 
-    if (point.j < columns - 1 && (matr[point.i][point.j + 1] != 'X')) {
+    if (point.j < columns - 1 && (matr[point.i][point.j + 1] != 'X') && !isVisited(point, visit)) {
         Point right;
         right.i = point.i;
         right.j = point.j + 1;
@@ -195,7 +206,7 @@ void FindReach(Point& point, vector<Point>& reach, char** matr, int rows, int co
         reach.push_back(right);
     }
 
-    if (point.i > 0 && (matr[point.i - 1][point.j] != 'X')) {
+    if (point.i > 0 && (matr[point.i - 1][point.j] != 'X') && !isVisited(point, visit)) {
         Point up;
         up.i = point.i - 1;
         up.j = point.j;
@@ -204,7 +215,7 @@ void FindReach(Point& point, vector<Point>& reach, char** matr, int rows, int co
         reach.push_back(up);
     }
 
-    if (point.i < rows - 1 && (matr[point.i + 1][point.j] != 'X')) {
+    if (point.i < rows - 1 && (matr[point.i + 1][point.j] != 'X') && !isVisited(point, visit)) {
         Point down;
         down.i = point.i + 1;
         down.j = point.j;
@@ -222,8 +233,10 @@ void Dijkstra(char** Matrix, int rows, int columns)
     start.dist = 0;
     vector<Point> visited, reachable;
     visited.push_back(start);
-    FindReach(start, reachable, Matrix, rows, columns);
+    while (!isVisited(end, visited)) {
+        FindReach(start, reachable, visited, Matrix, rows, columns);
 
+    }
 
     /*
     int index;
