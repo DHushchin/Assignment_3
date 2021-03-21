@@ -65,6 +65,7 @@ void FindScopes(Point&, Point&);
 bool isVisited(Point, vector<Point>);
 void FindReach(Point&, vector<Point>&, vector<Point>&, char**, int, int, int);
 void Dijkstra(char**, int, int);
+void Output(char**, size_t, size_t);
 
 int main()
 {
@@ -79,9 +80,8 @@ int main()
     FillMatrix(input, Matrix, rows, columns);
     PrintMatrix(Matrix, rows, columns);
     input.close();
-    
-
-
+    //Dijkstra(Matrix, rows, columns);
+    Output(Matrix, rows, columns);
     DeleteMatrix(Matrix, rows, columns);
     return 0;
 }
@@ -219,7 +219,6 @@ void FindReach(Point& point, vector<Point>& reachable, vector<Point>& visit, cha
             }
         }
     }
- 
 
     if (point.j < columns - 1 && (matr[point.i][point.j + 1] != 'X')) {
         Point point1(point);
@@ -231,6 +230,7 @@ void FindReach(Point& point, vector<Point>& reachable, vector<Point>& visit, cha
             right.parent_id = point1.dist;
             right.dist = point1.id + 10;
             reachable.push_back(right);
+            visit.push_back(right);
         }
         else {
             if (visit[point1.id].dist > point1.dist) {
@@ -250,6 +250,7 @@ void FindReach(Point& point, vector<Point>& reachable, vector<Point>& visit, cha
             up.parent_id = point1.id;
             up.dist = point1.dist + 10;
             reachable.push_back(up);
+            visit.push_back(up);
         }
         else {
             if (visit[point1.id].dist > point1.dist) {
@@ -259,7 +260,7 @@ void FindReach(Point& point, vector<Point>& reachable, vector<Point>& visit, cha
         }
     }
 
-    if (point.i < rows - 1 && (matr[point.i + 1][point.j] != 'X')) {
+    if (point.i < (rows - 1) && (matr[point.i + 1][point.j] != 'X')) {
         Point point1(point);
         ++point1.i;
         if (!isVisited(point1, visit)) {
@@ -269,6 +270,7 @@ void FindReach(Point& point, vector<Point>& reachable, vector<Point>& visit, cha
             down.parent_id = point1.id;
             down.dist = point1.dist + 10;
             reachable.push_back(down);
+            visit.push_back(down);
         }
         else {
             if (visit[point1.id].dist > point1.dist) {
@@ -294,4 +296,18 @@ void Dijkstra(char** Matrix, int rows, int columns)
         FindReach(reachable[i], reachable, visited, Matrix, rows, columns, min_dist);
         i++;
     }
+}
+
+void Output(char** Matrix, size_t rows, size_t columns) 
+{
+    ofstream output("..\\..\\iofiles\\output.txt");
+    for (size_t i = 0; i < rows; i++)
+    {
+        for (size_t j = 0; j < columns; j++)
+        {
+            output << Matrix[i][j];
+        }
+        output << endl;
+    }
+    output.close();
 }
