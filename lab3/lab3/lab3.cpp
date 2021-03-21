@@ -31,27 +31,25 @@ struct Point {
     int dist;
     int id;
     int parent_id;
-
-    bool operator ==(const Point& other) {
-        return this->i == other.i && this->j == other.j;
-    }
-
-    bool operator !=(const Point& other) {
-        return !(this->i == other.i && this->j == other.j);
-    }
-
-    Point() {
-
-    }
+  
+    Point() {};
 
     Point(const Point& other) {
         this->i = other.i;
         this->j = other.j;
         this->id = other.id;
         this->parent_id = other.parent_id;
-    }
+    };
 
-    ~Point();
+    ~Point() {};
+
+    bool operator ==(const Point& other) {
+        return this->i == other.i && this->j == other.j;
+    };
+
+    bool operator !=(const Point& other) {
+        return !(this->i == other.i && this->j == other.j);
+    };
 };
 
 inline double heuristic(int x1, int y1, int x2, int y2) {
