@@ -4,8 +4,7 @@
 #include <string>
 #include <queue>
 
-#define X_STEP 20
-#define Y_STEP 20
+
 #define INF INT_MAX
 
 using namespace std;
@@ -42,11 +41,11 @@ struct Point {
 };
 
 inline double heuristic(int x1, int y1, int x2, int y2) {
-    return abs(x1 - x2) + abs(y1 - y2);
+    return fabs(x1 - x2) + fabs(y1 - y2);
 }
 
 bool isBlock(char** matr, int i, int j) { 
-    if (matr[i][j] = 'X') return true;
+    if (matr[i][j] == 'X') return true;
     else return false;
 }
 
@@ -228,6 +227,15 @@ int** CreateGraph(int& size) {
     {
         graph[i] = new int[size];
     }
+    return graph;
+}
+
+void DeleteGraph(int** graph, int& size) {
+    for (size_t i = 0; i < size; i++)
+    {
+        delete[] graph[i];
+    }
+    delete graph;
 }
 
 void FillGraph(int** Matrix, size_t& rows, size_t& columns, int** Graph, int& size) {
