@@ -15,6 +15,8 @@ char** CreateMatrix(size_t&, size_t&);
 void FillMatrix(ifstream&, char**, size_t&, size_t&);
 void DeleteMatrix(char**, size_t&, size_t&);
 void PrintMatrix(char** Matrix, size_t& rows, size_t& columns);
+int FindSizeGraph(char** Matrix, size_t& rows, size_t& columns);
+int CreateGraph(int& size);
 
 class Queue {
 private:
@@ -48,25 +50,25 @@ bool isBlock(char** matr, int i, int j) {
 }
 
 
-
 int main()
 {
-    ifstream input("..\\..\\iofiles\\input.txt");
+    ifstream input("..\\..\\iofiles\\newinput.txt");
     size_t rows, columns;
     char** Matrix;
     FindSize(input, rows, columns);
     Matrix = CreateMatrix(rows, columns);
     input.close();
     input.clear();
-    input.open("..\\..\\iofiles\\input.txt");
+    input.open("..\\..\\iofiles\\newinput.txt");
     FillMatrix(input, Matrix, rows, columns);
     PrintMatrix(Matrix, rows, columns);
-    DeleteMatrix(Matrix, rows, columns);
     input.close();
+    //graph
+    int sizeOfGraph = FindSizeGraph(Matrix, rows, columns);
+    cout << sizeOfGraph;
 
-    
 
-
+    DeleteMatrix(Matrix, rows, columns);
     return 0;
 }
 
@@ -168,7 +170,6 @@ void DeleteMatrix(char** Matrix, size_t &rows, size_t& columns) {
     delete Matrix;
 }
 
-
 void FindScopes(int& start, int& end) {
     cout << "start = ";
     cin >> start;
@@ -180,7 +181,7 @@ void Dijkstra(int** Graph, int& Size)
 {
     int st, end;
     FindScopes(st, end);
-    int count, index, u;
+    int index;
     int* distance = new int[Size];
     bool* visited = new bool[Size];
     for (int i = 0; i < Size; i++)
@@ -188,7 +189,7 @@ void Dijkstra(int** Graph, int& Size)
         distance[i] = INF; visited[i] = false;
     }
     distance[st] = 0;
-    for (count = 0; count < Size - 1; count++)
+    for (int count = 0; count < Size - 1; count++)
     {
         int min = INF;
         for (int i = 0; i < Size; i++)
@@ -202,4 +203,22 @@ void Dijkstra(int** Graph, int& Size)
                 distance[index] + Graph[index][i] < distance[i])
                 distance[i] = distance[index] + Graph[index][i];
     }
+}
+
+int FindSizeGraph(char** Matrix, size_t& rows, size_t& columns) {
+    int size = 0;
+    for (size_t i = 0; i < rows; i++)
+    {
+        for (size_t j = 0; j < columns; j++)
+        {
+            if (Matrix[i][j] != 'X' && Matrix[i][j] == ' ') {
+                size++;
+            }
+        }
+    }
+    return size;
+}
+
+int CreateGraph(int& size) {
+
 }
