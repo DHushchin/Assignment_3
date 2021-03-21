@@ -49,6 +49,17 @@ struct Point {
     bool operator !=(const Point& other) {
         return !(this->i == other.i && this->j == other.j);
     }
+
+    Point() {
+
+    }
+
+    Point(const Point& other) {
+        this->i = other.i;
+        this->j = other.j;
+        this->id = other.id;
+        this->parent_id = other.parent_id;
+    }
 };
 
 inline double heuristic(int x1, int y1, int x2, int y2) {
@@ -190,47 +201,74 @@ bool isVisited(Point point, vector<Point> visited) {
     }
 }
 
-void FindReach(Point& point, vector<Point>& reach, vector<Point>& visit, char** matr, int rows, int columns, int min) {
-    if (point.j > 0 && (matr[point.i][point.j - 1] != 'X') && !isVisited(point, visit)) {
-        Point left;
-        left.i = point.i;
-        left.j = point.j - 1;
-        left.parent_id = point.id;
-        left.dist = point.dist + 10;
+void FindReach(Point& point, vector<Point>& reachable, vector<Point>& visit, char** matr, int rows, int columns, int min) {
+    if (point.j > 0 && (matr[point.i][point.j - 1] != 'X')) {
+        Point point1(point);
+        --point1.j;
+        if (!isVisited(point1, visit)) {
+            Point left;
+            left.i = point.i;
+            left.j = point1.j;
+            left.parent_id = point1.id;
+            left.dist = point1.dist + 10;
+            reachable.push_back(left);
+        }
+        else {
+            if (point1.dist < min) 
+                min = point1.dist;
+        }
     }
-    else if ((point.j > 0 && (matr[point.i][point.j - 1] != 'X') && isVisited(point, visit))) {
-        if (left.dist < min) min = left.dist;
-        reach.push_back(left);
+ 
+
+    if (point.j < columns - 1 && (matr[point.i][point.j + 1] != 'X')) {
+        Point point1(point);
+        ++point1.j;
+        if (!isVisited(point1, visit)) {
+            Point right;
+            right.i = point1.i;
+            right.j = point1.j;
+            right.parent_id = point1.dist;
+            right.dist = point1.id + 10;
+            reachable.push_back(right);
+        }
+        else {
+            if (point1.dist < min)
+                min = point1.dist;
+        }
     }
 
-    if (point.j < columns - 1 && (matr[point.i][point.j + 1] != 'X') && !isVisited(point, visit)) {
-        Point right;
-        right.i = point.i;
-        right.j = point.j + 1;
-        right.parent_id = point.dist;
-        right.dist = point.id + 10;
-        if (right.dist < min) min = right.dist;
-        reach.push_back(right);
+    if (point.i > 0 && (matr[point.i - 1][point.j] != 'X')) {
+        Point point1(point);
+        --point1.i;
+        if (!isVisited(point1, visit)) {
+            Point up;
+            up.i = point1.i;
+            up.j = point1.j;
+            up.parent_id = point1.id;
+            up.dist = point1.dist + 10;
+            reachable.push_back(up);
+        }
+        else {
+            if (point1.dist < min)
+                min = point1.dist;
+        }
     }
 
-    if (point.i > 0 && (matr[point.i - 1][point.j] != 'X') && !isVisited(point, visit)) {
-        Point up;
-        up.i = point.i - 1;
-        up.j = point.j;
-        up.parent_id = point.id;
-        up.dist = point.dist + 10;
-        if (up.dist < min) min = up.dist;
-        reach.push_back(up);
-    }
-
-    if (point.i < rows - 1 && (matr[point.i + 1][point.j] != 'X') && !isVisited(point, visit)) {
-        Point down;
-        down.i = point.i + 1;
-        down.j = point.j;
-        down.parent_id = point.id;
-        down.dist = point.dist + 10;
-        if (down.dist < min) min = down.dist;
-        reach.push_back(down);
+    if (point.i < rows - 1 && (matr[point.i + 1][point.j] != 'X')) {
+        Point point1(point);
+        ++point1.i;
+        if (!isVisited(point1, visit)) {
+            Point down;
+            down.i = point1.i;
+            down.j = point1.j;
+            down.parent_id = point1.id;
+            down.dist = point1.dist + 10;
+            reachable.push_back(down);
+        }
+        else {
+            if (point1.dist < min)
+                min = point1.dist;
+        }
     }
 }
 
