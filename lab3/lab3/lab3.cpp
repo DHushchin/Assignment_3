@@ -16,7 +16,7 @@ void PrintMatrix(char** Matrix, size_t& rows, size_t& columns);
 void FindScopes(Point& point1, Point& point2);
 bool isVisited(Point point, vector<Point> visited);
 void FindReach(Point& point, vector<Point>& reach, vector<Point>& visit, char** matr, int rows, int columns, int min);
-void Dijkstra(char** Matrix, int rows, int columns)
+void Dijkstra(char** Matrix, int rows, int columns);
 
 class Queue {
 private:
@@ -196,7 +196,9 @@ void FindReach(Point& point, vector<Point>& reach, vector<Point>& visit, char** 
         left.i = point.i;
         left.j = point.j - 1;
         left.parent_id = point.id;
-        left.dist = point.id + 10;
+        left.dist = point.dist + 10;
+    }
+    else if ((point.j > 0 && (matr[point.i][point.j - 1] != 'X') && isVisited(point, visit))) {
         if (left.dist < min) min = left.dist;
         reach.push_back(left);
     }
@@ -205,7 +207,7 @@ void FindReach(Point& point, vector<Point>& reach, vector<Point>& visit, char** 
         Point right;
         right.i = point.i;
         right.j = point.j + 1;
-        right.parent_id = point.id;
+        right.parent_id = point.dist;
         right.dist = point.id + 10;
         if (right.dist < min) min = right.dist;
         reach.push_back(right);
@@ -216,7 +218,7 @@ void FindReach(Point& point, vector<Point>& reach, vector<Point>& visit, char** 
         up.i = point.i - 1;
         up.j = point.j;
         up.parent_id = point.id;
-        up.dist = point.id + 10;
+        up.dist = point.dist + 10;
         if (up.dist < min) min = up.dist;
         reach.push_back(up);
     }
@@ -226,7 +228,7 @@ void FindReach(Point& point, vector<Point>& reach, vector<Point>& visit, char** 
         down.i = point.i + 1;
         down.j = point.j;
         down.parent_id = point.id;
-        down.dist = point.id + 10;
+        down.dist = point.dist + 10;
         if (down.dist < min) min = down.dist;
         reach.push_back(down);
     }
