@@ -8,16 +8,6 @@
 
 using namespace std;
 
-void FindSize(ifstream& , size_t&, size_t&);
-char** CreateMatrix(size_t&, size_t&);
-void FillMatrix(ifstream&, char**, size_t&, size_t&);
-void DeleteMatrix(char**, size_t&, size_t&);
-void PrintMatrix(char** Matrix, size_t& rows, size_t& columns);
-void FindScopes(Point& point1, Point& point2);
-bool isVisited(Point point, vector<Point> visited);
-void FindReach(Point& point, vector<Point>& reach, vector<Point>& visit, char** matr, int rows, int columns, int min);
-void Dijkstra(char** Matrix, int rows, int columns);
-
 class Queue {
 private:
     int* arr;
@@ -60,13 +50,23 @@ struct Point {
         this->id = other.id;
         this->parent_id = other.parent_id;
     }
+
+    ~Point();
 };
 
 inline double heuristic(int x1, int y1, int x2, int y2) {
     return fabs(x1 - x2) + fabs(y1 - y2);
 }
 
-
+void FindSize(ifstream&, size_t&, size_t&);
+char** CreateMatrix(size_t&, size_t&);
+void FillMatrix(ifstream&, char**, size_t&, size_t&);
+void DeleteMatrix(char**, size_t&, size_t&);
+void PrintMatrix(char** Matrix, size_t& rows, size_t& columns);
+void FindScopes(Point&, Point&);
+bool isVisited(Point, vector<Point>);
+void FindReach(Point&, vector<Point>&, vector<Point>&, char**, int, int, int);
+void Dijkstra(char**, int, int);
 
 int main()
 {
@@ -197,8 +197,8 @@ void FindScopes(Point& point1, Point& point2) {
 bool isVisited(Point point, vector<Point> visited) {
     for (size_t i = 0; i < visited.size(); i++) {
         if (visited[i] == point) return true;
-        else return false;
     }
+    return false;
 }
 
 void FindReach(Point& point, vector<Point>& reachable, vector<Point>& visit, char** matr, int rows, int columns, int min) {
@@ -212,11 +212,12 @@ void FindReach(Point& point, vector<Point>& reachable, vector<Point>& visit, cha
             left.parent_id = point1.id;
             left.dist = point1.dist + 10;
             reachable.push_back(left);
+            visit.push_back(left);
         }
         else {
             if (visit[point1.id].dist > point1.dist) {
                visit[point1.id].dist = point1.dist;
-               visit[point1.id].id = point1.id;
+               visit[point1.id].parent_id = point1.parent_id;
             }
         }
     }
@@ -236,7 +237,7 @@ void FindReach(Point& point, vector<Point>& reachable, vector<Point>& visit, cha
         else {
             if (visit[point1.id].dist > point1.dist) {
                 visit[point1.id].dist = point1.dist;
-                visit[point1.id].id = point1.id;
+                visit[point1.id].parent_id = point1.parent_id;
             }
         }
     }
@@ -255,7 +256,7 @@ void FindReach(Point& point, vector<Point>& reachable, vector<Point>& visit, cha
         else {
             if (visit[point1.id].dist > point1.dist) {
                 visit[point1.id].dist = point1.dist;
-                visit[point1.id].id = point1.id;
+                visit[point1.id].parent_id = point1.parent_id;
             }
         }
     }
@@ -274,7 +275,7 @@ void FindReach(Point& point, vector<Point>& reachable, vector<Point>& visit, cha
         else {
             if (visit[point1.id].dist > point1.dist) {
                 visit[point1.id].dist = point1.dist;
-                visit[point1.id].id = point1.id;
+                visit[point1.id].parent_id = point1.parent_id;
             }
         }
     }
@@ -290,9 +291,9 @@ void Dijkstra(char** Matrix, int rows, int columns)
     visited.push_back(start);
     int min_dist = INF;
     FindReach(start, reachable, visited, Matrix, rows, columns, min_dist);
+    int i = 0;
     while (!isVisited(end, visited)) {
-        for (size_t i = 0; i < reachable.size(); i++) {
-            FindReach(reachable[i], reachable, visited, Matrix, rows, columns, min_dist);
-        }
+        FindReach(reachable[i], reachable, visited, Matrix, rows, columns, min_dist);
+        i++;
     }
 }
