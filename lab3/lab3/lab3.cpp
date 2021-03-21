@@ -187,13 +187,14 @@ bool isVisited(Point point, vector<Point> visited) {
     }
 }
 
-void FindReach(Point& point, vector<Point>& reach, vector<Point>& visit, char** matr, int rows, int columns) {
+void FindReach(Point& point, vector<Point>& reach, vector<Point>& visit, char** matr, int rows, int columns, int min) {
     if (point.j > 0 && (matr[point.i][point.j - 1] != 'X') && !isVisited(point, visit)) {
         Point left;
         left.i = point.i;
         left.j = point.j - 1;
         left.parent_id = point.id;
         left.dist = point.id + 10;
+        if (left.dist < min) min = left.dist;
         reach.push_back(left);
     }
 
@@ -203,6 +204,7 @@ void FindReach(Point& point, vector<Point>& reach, vector<Point>& visit, char** 
         right.j = point.j + 1;
         right.parent_id = point.id;
         right.dist = point.id + 10;
+        if (right.dist < min) min = right.dist;
         reach.push_back(right);
     }
 
@@ -212,6 +214,7 @@ void FindReach(Point& point, vector<Point>& reach, vector<Point>& visit, char** 
         up.j = point.j;
         up.parent_id = point.id;
         up.dist = point.id + 10;
+        if (up.dist < min) min = up.dist;
         reach.push_back(up);
     }
 
@@ -221,6 +224,7 @@ void FindReach(Point& point, vector<Point>& reach, vector<Point>& visit, char** 
         down.j = point.j;
         down.parent_id = point.id;
         down.dist = point.id + 10;
+        if (down.dist < min) min = down.dist;
         reach.push_back(down);
     }
 }
@@ -233,35 +237,13 @@ void Dijkstra(char** Matrix, int rows, int columns)
     start.dist = 0;
     vector<Point> visited, reachable;
     visited.push_back(start);
+    int min_dist = INF;
+    FindReach(start, reachable, visited, Matrix, rows, columns, min_dist);
     while (!isVisited(end, visited)) {
-        FindReach(start, reachable, visited, Matrix, rows, columns);
-
-    }
-
-    /*
-    int index;
-    for (int i = 0; i < Size; i++)
-    {
-        distance[i] = INF; visited[i] = false;
-    }
-    distance[st] = 0;
-    for (int count = 0; count < Size - 1; count++)
-    {
-        int min = INF;
-        for (int i = 0; i < Size; i++)
-            if (!visited[i] && distance[i] <= min)
-            {
-                min = distance[i]; index = i;
-            }
-        visited[index] = true;
-        for (int i = 0; i < Size; i++) {
-            if (!visited[i] && Graph[index][i] && distance[index] != INF &&
-                distance[index] + Graph[index][i] < distance[i]) {
-                distance[i] = distance[index] + Graph[index][i];
-            }
+        for (size_t i = 0; i < reachable.size(); i++) {
+            FindReach(reachable[i], reachable, visited, Matrix, rows, columns, min_dist);
         }
     }
-    */
 }
 
 
