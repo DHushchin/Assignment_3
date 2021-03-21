@@ -25,18 +25,20 @@ public:
     int front();
 };
 
-
-struct Point {
-    int i, j;
-    int dist;
-    int id;
-    int parent_id;
+class Point {
+public:
+    int i{0}, j{0};
+    int dist{0};
+    int id{0};
+    int parent_id{0};
   
     Point() {};
+
 
     Point(const Point& other) {
         this->i = other.i;
         this->j = other.j;
+        this->dist = other.dist;
         this->id = other.id;
         this->parent_id = other.parent_id;
     };
@@ -63,8 +65,9 @@ void DeleteMatrix(char**, size_t&, size_t&);
 void PrintMatrix(char** Matrix, size_t& rows, size_t& columns);
 void FindScopes(Point&, Point&);
 bool isVisited(Point, vector<Point>);
-void FindReach(Point&, vector<Point>&, vector<Point>&, char**, int, int, int);
+void FindReach(Point, vector<Point>&, vector<Point>&, char**, int, int, int);
 void Dijkstra(char**, int, int);
+void Output(char**, size_t, size_t);
 
 int main()
 {
@@ -79,8 +82,8 @@ int main()
     FillMatrix(input, Matrix, rows, columns);
     PrintMatrix(Matrix, rows, columns);
     input.close();
-    
-
+    Dijkstra(Matrix, rows, columns);
+    Output(Matrix, rows, columns);
 
     DeleteMatrix(Matrix, rows, columns);
     return 0;
@@ -184,6 +187,20 @@ void DeleteMatrix(char** Matrix, size_t &rows, size_t& columns) {
     delete Matrix;
 }
 
+void Output(char** Matrix, size_t rows, size_t columns)
+{
+    ofstream output("..\\..\\iofiles\\output.txt");
+    for (size_t i = 0; i < rows; i++)
+    {
+        for (size_t j = 0; j < columns; j++)
+        {
+            output << Matrix[i][j];
+        }
+        output << endl;
+    }
+    output.close();
+}
+
 void FindScopes(Point& point1, Point& point2) {
     cout << endl << "Enter I coord of start point: "; cin >> point1.i;
     cout << "Enter J coord of start point: "; cin >> point1.j;
@@ -199,81 +216,86 @@ bool isVisited(Point point, vector<Point> visited) {
     return false;
 }
 
-void FindReach(Point& point, vector<Point>& reachable, vector<Point>& visit, char** matr, int rows, int columns, int min) {
+void FindReach(Point point, vector<Point>& reachable, vector<Point>& visited, char** matr, int rows, int columns, int min) {
     if (point.j > 0 && (matr[point.i][point.j - 1] != 'X')) {
         Point point1(point);
         --point1.j;
-        if (!isVisited(point1, visit)) {
+        if (!isVisited(point1, visited)) {
             Point left;
-            left.i = point.i;
+            left.i = point1.i;
             left.j = point1.j;
             left.parent_id = point1.id;
             left.dist = point1.dist + 10;
             reachable.push_back(left);
-            visit.push_back(left);
+            visited.push_back(left);
         }
         else {
-            if (visit[point1.id].dist > point1.dist) {
-               visit[point1.id].dist = point1.dist;
-               visit[point1.id].parent_id = point1.parent_id;
+            if (visited[point1.id].dist > point1.dist) {
+               visited[point1.id].dist = point1.dist;
+               visited[point1.id].parent_id = point1.parent_id;
             }
         }
     }
  
 
-    if (point.j < columns - 1 && (matr[point.i][point.j + 1] != 'X')) {
+    if (point.j < (columns - 1) && (matr[point.i][point.j + 1] != 'X')) {
         Point point1(point);
         ++point1.j;
-        if (!isVisited(point1, visit)) {
+        if (!isVisited(point1, visited)) {
             Point right;
             right.i = point1.i;
             right.j = point1.j;
             right.parent_id = point1.dist;
-            right.dist = point1.id + 10;
+            right.dist = point1.dist + 10;
             reachable.push_back(right);
+            visited.push_back(right);
         }
         else {
-            if (visit[point1.id].dist > point1.dist) {
-                visit[point1.id].dist = point1.dist;
-                visit[point1.id].parent_id = point1.parent_id;
+            if (visited[point1.id].dist > point1.dist) {
+                visited[point1.id].dist = point1.dist;
+                visited[point1.id].parent_id = point1.parent_id;
             }
         }
     }
 
+
     if (point.i > 0 && (matr[point.i - 1][point.j] != 'X')) {
         Point point1(point);
         --point1.i;
-        if (!isVisited(point1, visit)) {
+        if (!isVisited(point1, visited)) {
             Point up;
             up.i = point1.i;
             up.j = point1.j;
             up.parent_id = point1.id;
             up.dist = point1.dist + 10;
             reachable.push_back(up);
+            visited.push_back(up);
         }
         else {
-            if (visit[point1.id].dist > point1.dist) {
-                visit[point1.id].dist = point1.dist;
-                visit[point1.id].parent_id = point1.parent_id;
+            if (visited[point1.id].dist > point1.dist) {
+                visited[point1.id].dist = point1.dist;
+                visited[point1.id].parent_id = point1.parent_id;
             }
         }
     }
 
-    if (point.i < rows - 1 && (matr[point.i + 1][point.j] != 'X')) {
+
+    if (point.i < (rows - 1) && matr[point.i + 1][point.j] != 'X' && !isVisited(point, visited)) {
         Point point1(point);
         ++point1.i;
-        if (!isVisited(point1, visit)) {
+        if (!isVisited(point1, visited)) {
             Point down;
             down.i = point1.i;
             down.j = point1.j;
             down.parent_id = point1.id;
             down.dist = point1.dist + 10;
             reachable.push_back(down);
+            visited.push_back(down);
         }
         else {
-            if (visit[point1.id].dist > point1.dist) {
-                visit[point1.id].dist = point1.dist;
-                visit[point1.id].parent_id = point1.parent_id;
+            if (visited[point1.id].dist > point1.dist) {
+                visited[point1.id].dist = point1.dist;
+                visited[point1.id].parent_id = point1.parent_id;
             }
         }
     }
@@ -289,9 +311,10 @@ void Dijkstra(char** Matrix, int rows, int columns)
     visited.push_back(start);
     int min_dist = INF;
     FindReach(start, reachable, visited, Matrix, rows, columns, min_dist);
-    int i = 0;
+    int k = 0;
     while (!isVisited(end, visited)) {
-        FindReach(reachable[i], reachable, visited, Matrix, rows, columns, min_dist);
-        i++;
+        FindReach(reachable[k], reachable, visited, Matrix, rows, columns, min_dist);
+        k++;
     }
 }
+
