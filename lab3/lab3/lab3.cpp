@@ -13,7 +13,10 @@ char** CreateMatrix(size_t&, size_t&);
 void FillMatrix(ifstream&, char**, size_t&, size_t&);
 void DeleteMatrix(char**, size_t&, size_t&);
 void PrintMatrix(char** Matrix, size_t& rows, size_t& columns);
-
+void FindScopes(Point& point1, Point& point2);
+bool isVisited(Point point, vector<Point> visited);
+void FindReach(Point& point, vector<Point>& reach, vector<Point>& visit, char** matr, int rows, int columns, int min);
+void Dijkstra(char** Matrix, int rows, int columns)
 
 class Queue {
 private:
@@ -245,6 +248,3 @@ void Dijkstra(char** Matrix, int rows, int columns)
         }
     }
 }
-
-
-
