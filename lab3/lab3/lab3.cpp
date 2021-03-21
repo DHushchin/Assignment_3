@@ -6,6 +6,7 @@
 
 #define X_STEP 20
 #define Y_STEP 20
+#define INF INT_MAX
 
 using namespace std;
 
@@ -165,4 +166,40 @@ void DeleteMatrix(char** Matrix, size_t &rows, size_t& columns) {
         delete[] Matrix[i];
     }
     delete Matrix;
+}
+
+
+void FindScopes(int& start, int& end) {
+    cout << "start = ";
+    cin >> start;
+    cout << "end";
+    cin >> end;
+}
+
+void Dijkstra(int** Graph, int& Size)
+{
+    int st, end;
+    FindScopes(st, end);
+    int count, index, u;
+    int* distance = new int[Size];
+    bool* visited = new bool[Size];
+    for (int i = 0; i < Size; i++)
+    {
+        distance[i] = INF; visited[i] = false;
+    }
+    distance[st] = 0;
+    for (count = 0; count < Size - 1; count++)
+    {
+        int min = INF;
+        for (int i = 0; i < Size; i++)
+            if (!visited[i] && distance[i] <= min)
+            {
+                min = distance[i]; index = i;
+            }
+        visited[index] = true;
+        for (int i = 0; i < Size; i++)
+            if (!visited[i] && Graph[index][i] && distance[index] != INF &&
+                distance[index] + Graph[index][i] < distance[i])
+                distance[i] = distance[index] + Graph[index][i];
+    }
 }
