@@ -17,7 +17,7 @@ void DeleteMatrix(char**, size_t&, size_t&);
 void PrintMatrix(char** Matrix, size_t& rows, size_t& columns);
 int FindSizeGraph(char** Matrix, size_t& rows, size_t& columns);
 int** CreateGraph(int& size);
-void FillGraph(int** Graph, int& size);
+void FillGraph(int** Matrix, size_t& rows, size_t& columns, int** Graph, int& size);
 
 class Queue {
 private:
@@ -199,10 +199,12 @@ void Dijkstra(int** Graph, int& Size)
                 min = distance[i]; index = i;
             }
         visited[index] = true;
-        for (int i = 0; i < Size; i++)
+        for (int i = 0; i < Size; i++) {
             if (!visited[i] && Graph[index][i] && distance[index] != INF &&
-                distance[index] + Graph[index][i] < distance[i])
+                distance[index] + Graph[index][i] < distance[i]) {
                 distance[i] = distance[index] + Graph[index][i];
+            }
+        }
     }
 }
 
@@ -228,6 +230,6 @@ int** CreateGraph(int& size) {
     }
 }
 
-void FillGraph(int** Graph, int& size) {
+void FillGraph(int** Matrix, size_t& rows, size_t& columns, int** Graph, int& size) {
 
 }
