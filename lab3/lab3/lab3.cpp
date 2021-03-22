@@ -226,7 +226,7 @@ void FindReach(Point point, vector<Point>& reachable, vector<Point>& visited, ch
             left.j = point1.j;
             left.parent_id = point1.id;
             left.dist = point1.dist + 10;
-            left.id = point.id + 1;;
+            left.id = visited.size();
             reachable.push_back(left);
             visited.push_back(left);
         }
@@ -246,9 +246,9 @@ void FindReach(Point point, vector<Point>& reachable, vector<Point>& visited, ch
             Point right;
             right.i = point1.i;
             right.j = point1.j;
-            right.parent_id = point1.dist;
+            right.parent_id = point1.id;
             right.dist = point1.dist + 10;
-            right.id = point.id + 1;
+            right.id = visited.size();
             reachable.push_back(right);
             visited.push_back(right);
         }
@@ -270,7 +270,7 @@ void FindReach(Point point, vector<Point>& reachable, vector<Point>& visited, ch
             up.j = point1.j;
             up.parent_id = point1.id;
             up.dist = point1.dist + 10;
-            up.id = point.id + 1;
+            up.id = visited.size();
             reachable.push_back(up);
             visited.push_back(up);
         }
@@ -292,7 +292,7 @@ void FindReach(Point point, vector<Point>& reachable, vector<Point>& visited, ch
             down.j = point1.j;
             down.parent_id = point1.id;
             down.dist = point1.dist + 10;
-            down.id = point.id + 1;
+            down.id = visited.size();
             reachable.push_back(down);
             visited.push_back(down);
         }
