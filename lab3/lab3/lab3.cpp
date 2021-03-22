@@ -226,6 +226,7 @@ void FindReach(Point point, vector<Point>& reachable, vector<Point>& visited, ch
             left.j = point1.j;
             left.parent_id = point1.id;
             left.dist = point1.dist + 10;
+            left.id = point.id + 1;;
             reachable.push_back(left);
             visited.push_back(left);
         }
@@ -247,6 +248,7 @@ void FindReach(Point point, vector<Point>& reachable, vector<Point>& visited, ch
             right.j = point1.j;
             right.parent_id = point1.dist;
             right.dist = point1.dist + 10;
+            right.id = point.id + 1;
             reachable.push_back(right);
             visited.push_back(right);
         }
@@ -268,6 +270,7 @@ void FindReach(Point point, vector<Point>& reachable, vector<Point>& visited, ch
             up.j = point1.j;
             up.parent_id = point1.id;
             up.dist = point1.dist + 10;
+            up.id = point.id + 1;
             reachable.push_back(up);
             visited.push_back(up);
         }
@@ -280,7 +283,7 @@ void FindReach(Point point, vector<Point>& reachable, vector<Point>& visited, ch
     }
 
 
-    if (point.i < (rows - 1) && matr[point.i + 1][point.j] != 'X' && !isVisited(point, visited)) {
+    if (point.i < (rows - 1) && matr[point.i + 1][point.j] != 'X') {
         Point point1(point);
         ++point1.i;
         if (!isVisited(point1, visited)) {
@@ -289,6 +292,7 @@ void FindReach(Point point, vector<Point>& reachable, vector<Point>& visited, ch
             down.j = point1.j;
             down.parent_id = point1.id;
             down.dist = point1.dist + 10;
+            down.id = point.id + 1;
             reachable.push_back(down);
             visited.push_back(down);
         }
@@ -305,6 +309,7 @@ void Dijkstra(char** Matrix, int rows, int columns)
 {
     Point start, end;
     FindScopes(start, end);
+    start.parent_id = -1;
     start.id = 0;
     start.dist = 0;
     vector<Point> visited, reachable;
@@ -315,6 +320,12 @@ void Dijkstra(char** Matrix, int rows, int columns)
     while (!isVisited(end, visited)) {
         FindReach(reachable[k], reachable, visited, Matrix, rows, columns, min_dist);
         k++;
+    }
+    end = visited[visited.size()-1];
+    Point curr = end;
+    while (curr.parent_id != -1) {
+        Matrix[curr.i][curr.j] = '1';
+        curr = visited[curr.parent_id];
     }
 }
 
