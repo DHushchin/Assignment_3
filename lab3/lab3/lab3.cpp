@@ -199,13 +199,14 @@ void Output(char** Matrix, size_t rows, size_t columns)
         output << endl;
     }
     output.close();
+    cout << "Saved to output.txt" << endl;
 }
 
 void FindScopes(Point& point1, Point& point2) {
-    cout << endl << "Enter I coord of start point: "; cin >> point1.i;
-    cout << "Enter J coord of start point: "; cin >> point1.j;
-    cout << "Enter I coord of end point: "; cin >> point2.i;
-    cout << "Enter J coord of end point: "; cin >> point2.j;
+    cout << endl << "Enter I coord of start point: "; cin >> point2.i;
+    cout << "Enter J coord of start point: "; cin >> point2.j;
+    cout << "Enter I coord of end point: "; cin >> point1.i;
+    cout << "Enter J coord of end point: "; cin >> point1.j;
     cout << endl;
 }
 
@@ -323,9 +324,15 @@ void Dijkstra(char** Matrix, int rows, int columns)
     }
     end = visited[visited.size()-1];
     Point curr = end;
+    int i = 49;
     while (curr.parent_id != -1) {
-        Matrix[curr.i][curr.j] = '1';
+        Matrix[curr.i][curr.j] = (char)i;
+        i++;
+        if (i == 58) i = 97;
         curr = visited[curr.parent_id];
     }
+    if (curr.parent_id == -1) {
+        Matrix[curr.i][curr.j] = (char)i;
+        i++;
+    }
 }
-
