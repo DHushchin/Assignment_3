@@ -86,12 +86,33 @@ int main()
     Dijkstra(Matrix, rows, columns);
     Output(Matrix, rows, columns);
     DeleteMatrix(Matrix, rows, columns);
+    Queue Q;
+    Q.push(1);
+    Q.push(2);
+    Q.push(3);
+    Q.push(4);
+    Q.push(5);
+    Q.push(6);
+    Q.push(7);
+    cout << Q.front() << endl;
+    Q.pop();
+    cout << Q.front() << endl;
+    Q.pop();
+    cout << Q.front() << endl;
+    Q.pop();
+    cout << Q.front() << endl;
+    Q.pop();
+    cout << Q.front() << endl;
+    Q.pop();
+    cout << Q.front() << endl;
+    Q.pop();
+    cout << Q.front() << endl;
     system("pause");
     return 0;
 }
 
 Queue::Queue() { // конструктор
-    arr = new int[100];
+    arr = new int[3];
 }
 
 Queue::Queue(const Queue& other) { // конструктор копирования
@@ -109,6 +130,18 @@ Queue::~Queue() { // деструктор
 }
 
 void Queue::push(int x) {
+    if (count >= 3) {
+        int* new_arr = new int[count * 2 + 1];
+        for (int i = 0; i < count; i++) {
+            new_arr[i] = arr[i];
+        }
+
+        delete[] arr;
+        this->arr = new_arr;
+        for (int i = 0; i < count; i++) {
+            arr[i] = new_arr[i];
+        }
+    }
     arr[tail++] = x;
     ++count;
 }
