@@ -66,6 +66,7 @@ void PrintMatrix(char** Matrix, size_t& rows, size_t& columns);
 void FindScopes(Point&, Point&);
 bool isVisited(Point, vector<Point>);
 void FindReach(Point, vector<Point>&, vector<Point>&, char**, int, int, int);
+void CreatePoint(Point, vector<Point>&, vector<Point>&);
 void Dijkstra(char**, int, int);
 void Output(char**, size_t, size_t);
 
@@ -84,8 +85,8 @@ int main()
     input.close();
     Dijkstra(Matrix, rows, columns);
     Output(Matrix, rows, columns);
-
     DeleteMatrix(Matrix, rows, columns);
+    system("pause");
     return 0;
 }
 
@@ -217,92 +218,51 @@ bool isVisited(Point point, vector<Point> visited) {
     return false;
 }
 
+void CreatePoint(Point point1, vector<Point>& reachable, vector<Point>& visited) {
+    if (!isVisited(point1, visited)) {
+        Point newPoint;
+        newPoint.i = point1.i;
+        newPoint.j = point1.j;
+        newPoint.parent_id = point1.id;
+        newPoint.dist = point1.dist + 10;
+        newPoint.id = visited.size();
+        reachable.push_back(newPoint);
+        visited.push_back(newPoint);
+    }
+    else {
+        if (visited[point1.id].dist > point1.dist) {
+            visited[point1.id].dist = point1.dist;
+            visited[point1.id].parent_id = point1.parent_id;
+        }
+    }
+}
+
 void FindReach(Point point, vector<Point>& reachable, vector<Point>& visited, char** matr, int rows, int columns, int min) {
     if (point.j > 0 && (matr[point.i][point.j - 1] != 'X')) {
         Point point1(point);
         --point1.j;
-        if (!isVisited(point1, visited)) {
-            Point left;
-            left.i = point1.i;
-            left.j = point1.j;
-            left.parent_id = point1.id;
-            left.dist = point1.dist + 10;
-            left.id = visited.size();
-            reachable.push_back(left);
-            visited.push_back(left);
-        }
-        else {
-            if (visited[point1.id].dist > point1.dist) {
-               visited[point1.id].dist = point1.dist;
-               visited[point1.id].parent_id = point1.parent_id;
-            }
-        }
+        CreatePoint(point1, reachable, visited);
     }
- 
+
 
     if (point.j < (columns - 1) && (matr[point.i][point.j + 1] != 'X')) {
         Point point1(point);
         ++point1.j;
-        if (!isVisited(point1, visited)) {
-            Point right;
-            right.i = point1.i;
-            right.j = point1.j;
-            right.parent_id = point1.id;
-            right.dist = point1.dist + 10;
-            right.id = visited.size();
-            reachable.push_back(right);
-            visited.push_back(right);
-        }
-        else {
-            if (visited[point1.id].dist > point1.dist) {
-                visited[point1.id].dist = point1.dist;
-                visited[point1.id].parent_id = point1.parent_id;
-            }
-        }
+        CreatePoint(point1, reachable, visited);   
     }
 
 
     if (point.i > 0 && (matr[point.i - 1][point.j] != 'X')) {
         Point point1(point);
         --point1.i;
-        if (!isVisited(point1, visited)) {
-            Point up;
-            up.i = point1.i;
-            up.j = point1.j;
-            up.parent_id = point1.id;
-            up.dist = point1.dist + 10;
-            up.id = visited.size();
-            reachable.push_back(up);
-            visited.push_back(up);
-        }
-        else {
-            if (visited[point1.id].dist > point1.dist) {
-                visited[point1.id].dist = point1.dist;
-                visited[point1.id].parent_id = point1.parent_id;
-            }
-        }
+        CreatePoint(point1, reachable, visited);
     }
 
 
     if (point.i < (rows - 1) && matr[point.i + 1][point.j] != 'X') {
         Point point1(point);
         ++point1.i;
-        if (!isVisited(point1, visited)) {
-            Point down;
-            down.i = point1.i;
-            down.j = point1.j;
-            down.parent_id = point1.id;
-            down.dist = point1.dist + 10;
-            down.id = visited.size();
-            reachable.push_back(down);
-            visited.push_back(down);
-        }
-        else {
-            if (visited[point1.id].dist > point1.dist) {
-                visited[point1.id].dist = point1.dist;
-                visited[point1.id].parent_id = point1.parent_id;
-            }
-        }
+        CreatePoint(point1, reachable, visited);
     }
 }
 
