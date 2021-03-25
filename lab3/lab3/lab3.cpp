@@ -72,14 +72,14 @@ void Output(char**, size_t, size_t);
 
 int main()
 {
-    ifstream input("..\\..\\iofiles\\newinput.txt");
+    ifstream input("..\\..\\iofiles\\input.txt");
     size_t rows, columns;
     char** Matrix;
     FindSize(input, rows, columns);
     Matrix = CreateMatrix(rows, columns);
     input.close();
     input.clear();
-    input.open("..\\..\\iofiles\\newinput.txt");
+    input.open("..\\..\\iofiles\\input.txt");
     FillMatrix(input, Matrix, rows, columns);
     PrintMatrix(Matrix, rows, columns);
     input.close();
